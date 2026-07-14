@@ -90,7 +90,7 @@ export default function Home() {
             <span className="pointer-events-none absolute h-20 w-40 bg-brand-gradient opacity-15 blur-2xl" />
             <img
               src={site.logo || "/logo-wordmark.svg"}
-              alt="ERBLIX"
+              alt="Herblixes"
               className="relative mx-auto h-16 w-auto max-w-[260px] object-contain"
             />
           </div>

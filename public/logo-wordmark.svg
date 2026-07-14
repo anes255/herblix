@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 92" fill="none">
-  <!-- Leaf mark -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 92" fill="none">
+  <!-- Leaf mark (the stylized "H") -->
   <path d="M54 12C33 14 16 24 16 46c0 9 3.4 16.5 9 21.6C37 65 55 57 59 34c1.8-9-.6-16-5-22z" fill="#059669"/>
   <path d="M20 66C27 49 38 37 52 30" stroke="#a7f3d0" stroke-width="4.5" stroke-linecap="round"/>
   <!-- Wordmark -->
   <text x="78" y="63"
         font-family="'Arial Black','Segoe UI',system-ui,sans-serif"
-        font-weight="900" font-size="52" letter-spacing="1.5" fill="#0f172a">ERBLIX</text>
+        font-weight="900" font-size="52" letter-spacing="1.5" fill="#0f172a">ERBLIXES</text>
 </svg>
