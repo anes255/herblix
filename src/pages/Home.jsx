@@ -10,7 +10,6 @@ import {
   Info,
   Leaf,
   Sparkles,
-  CheckCircle,
 } from "../components/Icons.jsx";
 
 function formatDate(value) {
@@ -86,20 +85,14 @@ export default function Home() {
 
       <div className="relative flex min-h-full flex-col items-center justify-center px-5 py-14">
         <main className="w-full max-w-md text-center animate-fade-up">
-          {/* Logo with glow ring */}
-          <div className="relative mx-auto h-24 w-24">
-            <span className="absolute inset-0 rounded-[1.75rem] bg-brand-gradient opacity-30 blur-xl" />
-            {site.logo ? (
-              <img
-                src={site.logo}
-                alt="الشعار"
-                className="relative h-24 w-24 rounded-[1.75rem] object-cover shadow-glow"
-              />
-            ) : (
-              <div className="relative flex h-24 w-24 items-center justify-center rounded-[1.75rem] bg-brand-gradient text-white shadow-glow animate-float">
-                <Leaf size={44} />
-              </div>
-            )}
+          {/* Brand logo */}
+          <div className="relative mx-auto flex items-center justify-center">
+            <span className="pointer-events-none absolute h-20 w-40 bg-brand-gradient opacity-15 blur-2xl" />
+            <img
+              src={site.logo || "/logo-wordmark.svg"}
+              alt="ERBLIX"
+              className="relative mx-auto h-16 w-auto max-w-[260px] object-contain"
+            />
           </div>
 
           {/* Trust badge */}
@@ -235,26 +228,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Trust features */}
-          {!result && (
-            <div className="mt-10 grid grid-cols-3 gap-3">
-              <Feature
-                icon={<CheckCircle size={22} />}
-                title="أصلي 100%"
-                desc="منتجات مضمونة"
-              />
-              <Feature
-                icon={<Sparkles size={22} />}
-                title="تحقق فوري"
-                desc="نتيجة في ثوانٍ"
-              />
-              <Feature
-                icon={<Phone size={22} />}
-                title="دعم مباشر"
-                desc="فريق جاهز لمساعدتك"
-              />
-            </div>
-          )}
         </main>
 
         <footer className="mt-14 flex items-center gap-1.5 text-xs text-slate-400">
@@ -279,14 +252,3 @@ function DetailRow({ icon, label, value }) {
   );
 }
 
-function Feature({ icon, title, desc }) {
-  return (
-    <div className="rounded-2xl border border-slate-100 bg-white/70 p-4 text-center shadow-sm backdrop-blur">
-      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-        {icon}
-      </span>
-      <p className="mt-2 text-sm font-extrabold text-slate-800">{title}</p>
-      <p className="mt-0.5 text-[11px] text-slate-400">{desc}</p>
-    </div>
-  );
-}
