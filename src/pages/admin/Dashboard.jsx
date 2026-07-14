@@ -13,6 +13,16 @@ import {
   Legend,
 } from "recharts";
 import { api } from "../../lib/api.js";
+import {
+  Search,
+  Calendar,
+  ShieldCheck,
+  ShieldAlert,
+  QrCode,
+  CheckCircle,
+  Ban,
+  Sparkles,
+} from "../../components/Icons.jsx";
 
 const resultLabels = {
   authentic: "أصلي",
@@ -20,17 +30,26 @@ const resultLabels = {
   disabled: "معطّل",
 };
 
-function StatCard({ label, value, tone = "slate" }) {
+function StatCard({ label, value, tone = "slate", icon }) {
   const tones = {
-    slate: "text-slate-900",
-    green: "text-brand-600",
-    red: "text-red-600",
-    amber: "text-amber-600",
+    slate: { text: "text-slate-900", chip: "bg-slate-100 text-slate-600" },
+    green: { text: "text-brand-600", chip: "bg-brand-50 text-brand-600" },
+    red: { text: "text-red-600", chip: "bg-red-50 text-red-500" },
+    amber: { text: "text-amber-600", chip: "bg-amber-50 text-amber-500" },
+    teal: { text: "text-accent-600", chip: "bg-accent-50 text-accent-600" },
   };
+  const t = tones[tone] || tones.slate;
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="text-sm font-bold text-slate-500">{label}</p>
-      <p className={`mt-2 text-3xl font-extrabold ${tones[tone]}`}>
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-card">
+      <div className="flex items-start justify-between">
+        <p className="text-sm font-bold text-slate-500">{label}</p>
+        {icon && (
+          <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${t.chip}`}>
+            {icon}
+          </span>
+        )}
+      </div>
+      <p className={`mt-2 text-3xl font-extrabold ${t.text}`}>
         {value?.toLocaleString("ar") ?? "0"}
       </p>
     </div>
@@ -56,20 +75,25 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-extrabold text-slate-900">لوحة التحكم</h1>
+      <div>
+        <h1 className="text-2xl font-extrabold text-slate-900">لوحة التحكم</h1>
+        <p className="mt-1 text-sm text-slate-500">
+          نظرة عامة على عمليات التحقق وحالة الرموز في الوقت الحقيقي.
+        </p>
+      </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="إجمالي عمليات البحث" value={t.totalSearches} />
-        <StatCard label="عمليات البحث اليوم" value={t.searchesToday} />
-        <StatCard label="نتائج أصلية" value={t.authenticSearches} tone="green" />
-        <StatCard label="نتائج مقلّدة/غير موجودة" value={t.fakeSearches} tone="red" />
+        <StatCard label="إجمالي عمليات البحث" value={t.totalSearches} icon={<Search size={18} />} />
+        <StatCard label="عمليات البحث اليوم" value={t.searchesToday} tone="teal" icon={<Calendar size={18} />} />
+        <StatCard label="نتائج أصلية" value={t.authenticSearches} tone="green" icon={<ShieldCheck size={18} />} />
+        <StatCard label="نتائج مقلّدة/غير موجودة" value={t.fakeSearches} tone="red" icon={<ShieldAlert size={18} />} />
       </div>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="إجمالي الرموز" value={t.totalCodes} />
-        <StatCard label="رموز مفعّلة" value={t.activeCodes} tone="green" />
-        <StatCard label="رموز معطّلة" value={t.disabledCodes} tone="amber" />
-        <StatCard label="إجمالي مرات التحقق" value={t.totalVerifications} />
+        <StatCard label="إجمالي الرموز" value={t.totalCodes} icon={<QrCode size={18} />} />
+        <StatCard label="رموز مفعّلة" value={t.activeCodes} tone="green" icon={<CheckCircle size={18} />} />
+        <StatCard label="رموز معطّلة" value={t.disabledCodes} tone="amber" icon={<Ban size={18} />} />
+        <StatCard label="إجمالي مرات التحقق" value={t.totalVerifications} tone="teal" icon={<Sparkles size={18} />} />
       </div>
 
       {/* Charts */}

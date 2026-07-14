@@ -1,5 +1,17 @@
 import { useEffect, useState } from "react";
-import { api } from "../lib/api.js";
+import {
+  ShieldCheck,
+  ShieldAlert,
+  Ban,
+  Phone,
+  Search,
+  Package,
+  Calendar,
+  Info,
+  Leaf,
+  Sparkles,
+  CheckCircle,
+} from "../components/Icons.jsx";
 
 function formatDate(value) {
   if (!value) return null;
@@ -14,6 +26,12 @@ function formatDate(value) {
   }
 }
 
+// Strip leading emojis/symbols the API may include, so we can pair the text
+// with a real icon instead.
+function cleanMsg(m = "") {
+  return m.replace(/^[^؀-ۿA-Za-z]+/, "").trim();
+}
+
 export default function Home() {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,8 +43,8 @@ export default function Home() {
   });
 
   useEffect(() => {
-    api
-      .get("/settings")
+    fetch(`${import.meta.env.VITE_API_BASE || ""}/api/settings`)
+      .then((r) => r.json())
       .then(setSite)
       .catch(() => {});
   }, []);
@@ -38,10 +56,18 @@ export default function Home() {
     setLoading(true);
     setResult(null);
     try {
-      const data = await api.post("/verify", { code: trimmed });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE || ""}/api/verify`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code: trimmed }),
+        }
+      );
+      const data = await res.json();
       setResult(data);
-    } catch (err) {
-      setResult({ status: "error", message: err.message });
+    } catch {
+      setResult({ status: "error", message: "تعذّر الاتصال بالخادم. حاول مجدداً." });
     } finally {
       setLoading(false);
     }
@@ -53,99 +79,214 @@ export default function Home() {
   const supportPhone = result?.supportPhone || site.supportPhone;
 
   return (
-    <div className="min-h-full flex flex-col items-center justify-center px-5 py-12">
-      <main className="w-full max-w-md text-center animate-fade-up">
-        {/* Logo */}
-        <img
-          src={site.logo || "/logo.svg"}
-          alt="الشعار"
-          className="mx-auto h-20 w-20 rounded-2xl shadow-soft"
-        />
+    <div className="relative min-h-full overflow-hidden bg-slate-50 bg-mesh">
+      {/* Decorative blurred blobs */}
+      <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-300/30 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-accent-400/20 blur-3xl" />
 
-        {/* Title */}
-        <h1 className="mt-6 text-2xl font-extrabold text-slate-900">
-          {site.siteName || "التحقق من أصالة المنتج"}
-        </h1>
-        <p className="mt-3 text-slate-500 leading-relaxed">
-          أدخل رمز المنتج للتأكد من أنه أصلي ومطابق للمواصفات.
-        </p>
-
-        {/* Form */}
-        <form onSubmit={onSubmit} className="mt-8 space-y-3">
-          <input
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="أدخل رمز المنتج"
-            className="ltr text-center w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-lg font-medium tracking-wider shadow-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
-            autoComplete="off"
-            autoFocus
-          />
-          <button
-            type="submit"
-            disabled={loading || !code.trim()}
-            className="w-full rounded-2xl bg-brand-600 px-5 py-4 text-lg font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? "جارٍ التحقق..." : "تحقق"}
-          </button>
-        </form>
-
-        {/* Result */}
-        {result && (
-          <div className="mt-8 animate-pop">
-            {isAuthentic && (
-              <div className="rounded-2xl border border-brand-100 bg-brand-50 p-6 text-right">
-                <p className="text-center text-xl font-extrabold text-brand-700">
-                  {result.message}
-                </p>
-                <dl className="mt-5 space-y-3 text-sm">
-                  <Row label="اسم المنتج" value={result.product?.productName} />
-                  <Row
-                    label="تاريخ الإنتاج"
-                    value={formatDate(result.product?.productionDate)}
-                  />
-                  <Row label="معلومات إضافية" value={result.product?.description} />
-                </dl>
-              </div>
-            )}
-
-            {(isNotFound || isDisabled) && (
-              <div className="rounded-2xl border border-red-100 bg-red-50 p-6">
-                <p className="text-xl font-extrabold text-red-600">
-                  {result.message}
-                </p>
-                {isNotFound && supportPhone && (
-                  <a
-                    href={`tel:${supportPhone}`}
-                    className="mt-5 block w-full rounded-2xl bg-slate-900 px-5 py-4 text-lg font-bold text-white shadow-soft transition hover:bg-slate-800"
-                  >
-                    اتصل بفريق الدعم
-                  </a>
-                )}
-              </div>
-            )}
-
-            {result.status === "error" && (
-              <div className="rounded-2xl border border-amber-100 bg-amber-50 p-6">
-                <p className="font-bold text-amber-700">{result.message}</p>
+      <div className="relative flex min-h-full flex-col items-center justify-center px-5 py-14">
+        <main className="w-full max-w-md text-center animate-fade-up">
+          {/* Logo with glow ring */}
+          <div className="relative mx-auto h-24 w-24">
+            <span className="absolute inset-0 rounded-[1.75rem] bg-brand-gradient opacity-30 blur-xl" />
+            {site.logo ? (
+              <img
+                src={site.logo}
+                alt="الشعار"
+                className="relative h-24 w-24 rounded-[1.75rem] object-cover shadow-glow"
+              />
+            ) : (
+              <div className="relative flex h-24 w-24 items-center justify-center rounded-[1.75rem] bg-brand-gradient text-white shadow-glow animate-float">
+                <Leaf size={44} />
               </div>
             )}
           </div>
-        )}
-      </main>
 
-      <footer className="mt-12 text-xs text-slate-400">
-        © {new Date().getFullYear()} — جميع الحقوق محفوظة
-      </footer>
+          {/* Trust badge */}
+          <div className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-white/70 px-3 py-1 text-xs font-bold text-brand-700 backdrop-blur">
+            <Sparkles size={14} />
+            منتج موثوق ومحمي من التقليد
+          </div>
+
+          {/* Title */}
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900">
+            {site.siteName || "التحقق من أصالة المنتج"}
+          </h1>
+          <p className="mx-auto mt-3 max-w-sm leading-relaxed text-slate-500">
+            أدخل الرمز الموجود على غلاف منتجك للتأكد من أصالته خلال ثوانٍ.
+            نحميك من المنتجات المقلّدة ونضمن حصولك على الجودة الحقيقية.
+          </p>
+
+          {/* Form */}
+          <form onSubmit={onSubmit} className="mt-8 space-y-3">
+            <div className="relative">
+              <span className="absolute inset-y-0 right-4 flex items-center text-slate-400">
+                <Search size={20} />
+              </span>
+              <input
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="أدخل رمز المنتج"
+                className="ltr w-full rounded-2xl border border-slate-200 bg-white/90 py-4 pr-12 pl-5 text-center text-lg font-semibold tracking-[0.2em] shadow-card outline-none backdrop-blur transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
+                autoComplete="off"
+                autoFocus
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading || !code.trim()}
+              className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-gradient px-5 py-4 text-lg font-bold text-white shadow-glow transition hover:brightness-105 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  جارٍ التحقق...
+                </>
+              ) : (
+                <>
+                  <ShieldCheck size={22} />
+                  تحقق الآن
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Result */}
+          {result && (
+            <div className="mt-8 animate-pop">
+              {isAuthentic && (
+                <div className="overflow-hidden rounded-3xl border border-brand-200 bg-white shadow-card">
+                  <div className="flex flex-col items-center gap-3 bg-brand-gradient px-6 py-7 text-white">
+                    <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white/20">
+                      <span className="absolute inset-0 rounded-full bg-white/30 animate-pulse-ring" />
+                      <ShieldCheck size={38} />
+                    </span>
+                    <p className="text-xl font-extrabold">
+                      {cleanMsg(result.message)}
+                    </p>
+                    <p className="text-sm text-white/80">
+                      تم التحقق بنجاح — هذا المنتج مسجّل ومضمون.
+                    </p>
+                  </div>
+                  <dl className="space-y-1 p-5 text-right">
+                    <DetailRow
+                      icon={<Package size={18} />}
+                      label="اسم المنتج"
+                      value={result.product?.productName}
+                    />
+                    <DetailRow
+                      icon={<Calendar size={18} />}
+                      label="تاريخ الإنتاج"
+                      value={formatDate(result.product?.productionDate)}
+                    />
+                    <DetailRow
+                      icon={<Info size={18} />}
+                      label="معلومات إضافية"
+                      value={result.product?.description}
+                    />
+                  </dl>
+                </div>
+              )}
+
+              {(isNotFound || isDisabled) && (
+                <div className="overflow-hidden rounded-3xl border border-red-200 bg-white shadow-card">
+                  <div
+                    className={`flex flex-col items-center gap-3 px-6 py-7 text-white ${
+                      isDisabled
+                        ? "bg-gradient-to-br from-amber-500 to-orange-500"
+                        : "bg-gradient-to-br from-red-500 to-rose-600"
+                    }`}
+                  >
+                    <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20">
+                      {isDisabled ? <Ban size={36} /> : <ShieldAlert size={38} />}
+                    </span>
+                    <p className="text-xl font-extrabold">
+                      {cleanMsg(result.message)}
+                    </p>
+                    <p className="text-sm text-white/85">
+                      {isDisabled
+                        ? "هذا الرمز موجود لكنه معطّل حالياً."
+                        : "قد يكون المنتج مقلّداً أو الرمز غير صحيح."}
+                    </p>
+                  </div>
+                  {isNotFound && supportPhone && (
+                    <div className="p-5">
+                      <p className="mb-3 text-sm text-slate-500">
+                        هل تعتقد أن هناك خطأ؟ تواصل مع فريق الدعم للتأكد.
+                      </p>
+                      <a
+                        href={`tel:${supportPhone}`}
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-4 text-lg font-bold text-white shadow-soft transition hover:bg-slate-800 active:scale-[0.99]"
+                      >
+                        <Phone size={20} />
+                        اتصل بفريق الدعم
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {result.status === "error" && (
+                <div className="flex items-center justify-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-5 font-bold text-amber-700">
+                  <Info size={20} />
+                  {result.message}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Trust features */}
+          {!result && (
+            <div className="mt-10 grid grid-cols-3 gap-3">
+              <Feature
+                icon={<CheckCircle size={22} />}
+                title="أصلي 100%"
+                desc="منتجات مضمونة"
+              />
+              <Feature
+                icon={<Sparkles size={22} />}
+                title="تحقق فوري"
+                desc="نتيجة في ثوانٍ"
+              />
+              <Feature
+                icon={<Phone size={22} />}
+                title="دعم مباشر"
+                desc="فريق جاهز لمساعدتك"
+              />
+            </div>
+          )}
+        </main>
+
+        <footer className="mt-14 flex items-center gap-1.5 text-xs text-slate-400">
+          <Leaf size={14} />
+          © {new Date().getFullYear()} — جميع الحقوق محفوظة
+        </footer>
+      </div>
     </div>
   );
 }
 
-function Row({ label, value }) {
+function DetailRow({ icon, label, value }) {
   if (!value) return null;
   return (
-    <div className="flex items-start justify-between gap-4 border-t border-brand-100/60 pt-3">
-      <dt className="font-bold text-slate-600">{label}</dt>
-      <dd className="text-slate-800 text-left">{value}</dd>
+    <div className="flex items-center justify-between gap-4 border-t border-slate-100 py-3 first:border-t-0">
+      <dt className="flex items-center gap-2 font-bold text-slate-500">
+        <span className="text-brand-600">{icon}</span>
+        {label}
+      </dt>
+      <dd className="text-left font-semibold text-slate-800">{value}</dd>
+    </div>
+  );
+}
+
+function Feature({ icon, title, desc }) {
+  return (
+    <div className="rounded-2xl border border-slate-100 bg-white/70 p-4 text-center shadow-sm backdrop-blur">
+      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+        {icon}
+      </span>
+      <p className="mt-2 text-sm font-extrabold text-slate-800">{title}</p>
+      <p className="mt-0.5 text-[11px] text-slate-400">{desc}</p>
     </div>
   );
 }

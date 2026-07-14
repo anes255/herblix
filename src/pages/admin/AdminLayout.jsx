@@ -1,11 +1,18 @@
 import { NavLink, Outlet, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.js";
 import { api } from "../../lib/api.js";
+import {
+  LayoutDashboard,
+  QrCode,
+  Settings,
+  LogOut,
+  Leaf,
+} from "../../components/Icons.jsx";
 
 const links = [
-  { to: "/admin", label: "لوحة التحكم", end: true },
-  { to: "/admin/codes", label: "إدارة الرموز" },
-  { to: "/admin/settings", label: "الإعدادات" },
+  { to: "/admin", label: "لوحة التحكم", end: true, icon: LayoutDashboard },
+  { to: "/admin/codes", label: "إدارة الرموز", icon: QrCode },
+  { to: "/admin/settings", label: "الإعدادات", icon: Settings },
 ];
 
 export default function AdminLayout() {
@@ -35,7 +42,9 @@ export default function AdminLayout() {
       <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="" className="h-9 w-9 rounded-lg" />
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-gradient text-white shadow-soft">
+              <Leaf size={20} />
+            </span>
             <span className="font-extrabold text-slate-800">لوحة الإدارة</span>
           </div>
           <nav className="hidden gap-1 md:flex">
@@ -45,25 +54,30 @@ export default function AdminLayout() {
                 to={l.to}
                 end={l.end}
                 className={({ isActive }) =>
-                  `rounded-lg px-4 py-2 text-sm font-bold transition ${
+                  `flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition ${
                     isActive
                       ? "bg-brand-50 text-brand-700"
                       : "text-slate-500 hover:bg-slate-100"
                   }`
                 }
               >
+                <l.icon size={17} />
                 {l.label}
               </NavLink>
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-slate-500 sm:inline">
+            <span className="hidden items-center gap-2 text-sm text-slate-500 sm:flex">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-100 text-xs font-extrabold text-brand-700">
+                {admin.username?.[0]?.toUpperCase()}
+              </span>
               {admin.username}
             </span>
             <button
               onClick={logout}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-bold text-white hover:bg-slate-800"
+              className="flex items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-slate-800"
             >
+              <LogOut size={16} />
               خروج
             </button>
           </div>
@@ -76,11 +90,12 @@ export default function AdminLayout() {
               to={l.to}
               end={l.end}
               className={({ isActive }) =>
-                `whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-bold ${
+                `flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-bold ${
                   isActive ? "bg-brand-50 text-brand-700" : "text-slate-500"
                 }`
               }
             >
+              <l.icon size={16} />
               {l.label}
             </NavLink>
           ))}

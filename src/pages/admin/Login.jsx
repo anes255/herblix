@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api.js";
+import { Lock, ShieldCheck, LogOut } from "../../components/Icons.jsx";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -24,18 +25,25 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-full flex items-center justify-center px-5 py-12">
-      <div className="w-full max-w-sm animate-fade-up">
+    <div className="relative min-h-full overflow-hidden bg-slate-50 bg-mesh flex items-center justify-center px-5 py-12">
+      <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-brand-300/25 blur-3xl" />
+      <div className="relative w-full max-w-sm animate-fade-up">
         <div className="text-center">
-          <img src="/logo.svg" alt="" className="mx-auto h-16 w-16 rounded-2xl shadow-soft" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-glow">
+            <Lock size={30} />
+          </div>
           <h1 className="mt-5 text-xl font-extrabold text-slate-900">
             تسجيل دخول المشرف
           </h1>
+          <p className="mt-1.5 flex items-center justify-center gap-1.5 text-sm text-slate-400">
+            <ShieldCheck size={15} />
+            منطقة محمية — للمصرّح لهم فقط
+          </p>
         </div>
 
         <form
           onSubmit={onSubmit}
-          className="mt-8 space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft"
+          className="mt-8 space-y-4 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-card backdrop-blur"
         >
           {error && (
             <div className="rounded-xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
@@ -70,9 +78,19 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-brand-600 px-5 py-3 font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-gradient px-5 py-3 font-bold text-white shadow-glow transition hover:brightness-105 active:scale-[0.99] disabled:opacity-50"
           >
-            {loading ? "جارٍ الدخول..." : "دخول"}
+            {loading ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                جارٍ الدخول...
+              </>
+            ) : (
+              <>
+                <LogOut size={18} className="rotate-180" />
+                دخول
+              </>
+            )}
           </button>
         </form>
       </div>
