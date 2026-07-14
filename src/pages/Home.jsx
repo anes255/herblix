@@ -73,11 +73,7 @@ export default function Home() {
       <div className="mx-auto w-full max-w-md">
         {/* Header */}
         <header className="text-center animate-fade-up">
-          <div className="relative mx-auto flex h-40 w-40 items-center justify-center rounded-[2rem] bg-white shadow-card">
-            <span className="absolute right-4 top-4 h-4 w-4 rounded-full bg-gold-500" />
-            <img src="/brand-mark.svg" alt={BRAND} className="w-28" />
-          </div>
-          <h1 className="mt-5 text-3xl font-extrabold tracking-[0.18em] text-gold-600">
+          <h1 className="text-3xl font-extrabold tracking-[0.18em] text-gold-600">
             {BRAND}
           </h1>
           <p className="mt-1 font-bold text-herb-600">Produits Authentiques</p>
