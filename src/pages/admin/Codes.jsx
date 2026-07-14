@@ -307,7 +307,7 @@ export default function Codes() {
 
       {/* Pagination */}
       <div className="flex items-center justify-between text-sm text-slate-500">
-        <span>الإجمالي: {data.total.toLocaleString("ar")}</span>
+        <span>الإجمالي: {data.total.toLocaleString("ar-u-nu-latn")}</span>
         <div className="flex items-center gap-2">
           <button
             disabled={page <= 1}

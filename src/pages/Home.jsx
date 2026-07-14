@@ -15,7 +15,7 @@ import {
 function formatDate(value) {
   if (!value) return null;
   try {
-    return new Date(value).toLocaleDateString("ar", {
+    return new Date(value).toLocaleDateString("ar-u-nu-latn", {
       year: "numeric",
       month: "long",
       day: "numeric",

@@ -50,7 +50,7 @@ function StatCard({ label, value, tone = "slate", icon }) {
         )}
       </div>
       <p className={`mt-2 text-3xl font-extrabold ${t.text}`}>
-        {value?.toLocaleString("ar") ?? "0"}
+        {value?.toLocaleString("ar-u-nu-latn") ?? "0"}
       </p>
     </div>
   );
@@ -211,7 +211,7 @@ export default function Dashboard() {
                       </span>
                     </td>
                     <td className="ltr py-2 text-left text-xs text-slate-400">
-                      {new Date(l.timestamp).toLocaleString("ar")}
+                      {new Date(l.timestamp).toLocaleString("ar-u-nu-latn")}
                     </td>
                   </tr>
                 ))}
