@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-slate-50 text-slate-800 antialiased;
+  font-family: "Tajawal", system-ui, sans-serif;
+}
+
+/* Numbers/latin codes stay LTR inside RTL text */
+.ltr {
+  direction: ltr;
+  unicode-bidi: embed;
+}
