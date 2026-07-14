@@ -26,6 +26,28 @@ export default {
           500: "#14b8a6",
           600: "#0d9488",
         },
+        // Reference brand palette (gold + soft herbal green)
+        gold: {
+          50: "#faf6ec",
+          100: "#f5ecd3",
+          200: "#ebd9a8",
+          300: "#dfc178",
+          400: "#cca94f",
+          500: "#c1912e",
+          600: "#a4791f",
+          700: "#846017",
+        },
+        herb: {
+          50: "#eaf5ee",
+          100: "#d6ebdd",
+          200: "#b0d9bf",
+          300: "#84c29e",
+          400: "#5aab77",
+          500: "#4a9d6e",
+          600: "#3f8b60",
+          700: "#357552",
+          800: "#2e6448",
+        },
       },
       boxShadow: {
         soft: "0 10px 40px -12px rgba(0,0,0,0.12)",
