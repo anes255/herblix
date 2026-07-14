@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../lib/api.js";
+import { api, setToken } from "../../lib/api.js";
 import { Lock, ShieldCheck, LogOut } from "../../components/Icons.jsx";
 
 export default function AdminLogin() {
@@ -15,7 +15,8 @@ export default function AdminLogin() {
     setError("");
     setLoading(true);
     try {
-      await api.post("/admin/login", { username, password });
+      const data = await api.post("/admin/login", { username, password });
+      setToken(data.token);
       navigate("/admin", { replace: true });
     } catch (err) {
       setError(err.message);

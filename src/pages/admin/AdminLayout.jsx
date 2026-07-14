@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.js";
-import { api } from "../../lib/api.js";
+import { api, setToken } from "../../lib/api.js";
 import {
   LayoutDashboard,
   QrCode,
@@ -34,6 +34,7 @@ export default function AdminLayout() {
     } catch {
       // ignore
     }
+    setToken(null);
     navigate("/admin/login", { replace: true });
   }
 

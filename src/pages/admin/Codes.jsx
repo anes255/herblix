@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { api } from "../../lib/api.js";
+import { api, apiUrl, authHeaders } from "../../lib/api.js";
 
 const filters = [
   { key: "all", label: "الكل" },
@@ -100,6 +100,26 @@ export default function Codes() {
     }
   }
 
+  async function onExport() {
+    try {
+      const res = await fetch(apiUrl("/admin/codes/export"), {
+        headers: authHeaders(),
+      });
+      if (!res.ok) throw new Error("تعذّر التصدير");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "codes.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   async function onImport(e) {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -147,12 +167,12 @@ export default function Codes() {
             استيراد CSV
             <input type="file" accept=".csv" className="hidden" onChange={onImport} />
           </label>
-          <a
-            href={`${import.meta.env.VITE_API_BASE || ""}/api/admin/codes/export`}
+          <button
+            onClick={onExport}
             className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50"
           >
             تصدير CSV
-          </a>
+          </button>
           <button
             onClick={() => setModal({ mode: "add", form: { ...empty } })}
             className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-soft hover:bg-brand-700"
