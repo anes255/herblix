@@ -96,7 +96,7 @@ export default function Home() {
           </div>
 
           {/* Trust badge */}
-          <div className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-white/70 px-3 py-1 text-xs font-bold text-brand-700 backdrop-blur">
+          <div className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-white px-3 py-1 text-xs font-bold text-brand-700">
             <Sparkles size={14} />
             منتج موثوق ومحمي من التقليد
           </div>
@@ -120,9 +120,9 @@ export default function Home() {
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="أدخل رمز المنتج"
-                className="ltr w-full rounded-2xl border border-slate-200 bg-white/90 py-4 pr-12 pl-5 text-center text-lg font-semibold tracking-[0.2em] shadow-card outline-none backdrop-blur transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
+                className="ltr w-full rounded-2xl border border-slate-200 bg-white py-4 pr-12 pl-5 text-center text-lg font-semibold tracking-[0.2em] shadow-card outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
                 autoComplete="off"
-                autoFocus
+                inputMode="text"
               />
             </div>
             <button

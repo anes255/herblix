@@ -14,4 +14,17 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // Split heavy/vendor code so the public homepage loads a minimal bundle
+    // and Recharts only downloads when the admin dashboard opens.
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          recharts: ["recharts"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 900,
+  },
 });
