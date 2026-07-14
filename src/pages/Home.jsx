@@ -8,7 +8,7 @@ import {
   RefreshCw,
 } from "../components/Icons.jsx";
 
-const BRAND = "HERBLIXES";
+const BRAND = "HERBLIX";
 
 function formatUsedAt(value) {
   if (!value) return "وقت سابق";

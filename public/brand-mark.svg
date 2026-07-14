@@ -10,5 +10,5 @@
   <path d="M55 30V68" stroke="#2f7d52" stroke-width="2.5" stroke-linecap="round"/>
   <!-- wordmark -->
   <text x="96" y="65" font-family="'Arial Black','Segoe UI',system-ui,sans-serif"
-        font-weight="900" font-size="50" letter-spacing="1" fill="#141b2d">ERBLIXES</text>
+        font-weight="900" font-size="50" letter-spacing="1" fill="#141b2d">ERBLIX</text>
 </svg>
