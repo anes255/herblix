@@ -161,11 +161,6 @@ function ResultCard({ result, phone }) {
         <p className="mt-3 font-medium leading-relaxed text-herb-800">
           تم التحقق من الرمز بنجاح، والمنتج الذي بين يديك أصلي 100% ومعتمد من {BRAND}.
         </p>
-        {result.product?.productName && (
-          <p className="mt-3 text-sm font-bold text-herb-700">
-            المنتج: {result.product.productName}
-          </p>
-        )}
         <p className="mt-3 text-sm leading-relaxed text-herb-600">
           شكراً لثقتك بعلامتنا التجارية وحرصك على اقتناء المنتجات الأصلية.
         </p>
